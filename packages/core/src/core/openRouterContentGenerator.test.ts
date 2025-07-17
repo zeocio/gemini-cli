@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest';
 import { createOpenRouterContentGenerator } from './openRouterContentGenerator.js';
 import { ContentGeneratorConfig, AuthType } from './contentGenerator.js';
+import { Config } from '../config/config.js';
+
+vi.mock('../code_assist/codeAssist.js');
+vi.mock('@google/genai');
 
 describe('OpenRouter Content Generator', () => {
   const mockConfig: ContentGeneratorConfig = {
@@ -89,6 +93,27 @@ describe('OpenRouter Content Generator', () => {
 });
 
 describe('Model mapping', () => {
+  const originalEnv = process.env;
+  const mockConfig = {
+      getModel: vi.fn().mockReturnValue('gemini-2.5-flash'),
+      setModel: vi.fn(),
+      flashFallbackHandler: vi.fn(),
+      getProxy: vi.fn(),
+    } as unknown as Config;
+
+  beforeEach(() => {
+      // Reset modules to re-evaluate imports and environment variables
+      vi.resetModules();
+      // Restore process.env before each test
+      process.env = { ...originalEnv };
+      vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+      // Restore original process.env after all tests
+      process.env = originalEnv;
+  });
+
   it('should map Gemini models to OpenRouter format', async () => {
     // Set the environment variable for the test
     process.env.OPENROUTER_API_KEY = 'test-key';
@@ -98,7 +123,7 @@ describe('Model mapping', () => {
     );
 
     const config = await createContentGeneratorConfig(
-      'gemini-2.5-flash',
+      mockConfig,
       AuthType.USE_OPENROUTER,
     );
 
