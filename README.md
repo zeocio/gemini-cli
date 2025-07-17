@@ -70,7 +70,7 @@ The Vertex AI API provides a [free tier](https://cloud.google.com/vertex-ai/gene
 
 3. (Optionally) Add a billing account on your project to get access to [higher usage limits](https://cloud.google.com/vertex-ai/generative-ai/docs/quotas)
 
-For other authentication methods, including Google Workspace accounts, see the [authentication](./docs/cli/authentication.md) guide.
+For other authentication methods, including Google Workspace accounts and OpenRouter, see the [authentication](./docs/cli/authentication.md) guide. For OpenRouter specifically, see the [OpenRouter guide](./docs/openrouter.md).
 
 ## Examples
 
